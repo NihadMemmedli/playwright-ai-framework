@@ -1,28 +1,16 @@
 import axios from "axios";
 import { Logger } from "../utils/Logger";
-
-export interface LLMRequest {
-  prompt: string;
-  model?: string;
-  temperature?: number;
-  maxTokens?: number;
-  systemPrompt?: string;
-}
-
-export interface LLMResponse {
-  text: string;
-  success: boolean;
-  error?: string;
-}
-
-export interface MultimodalLLMRequest extends LLMRequest {
-  images?: string[]; // Array of base64 encoded images
-}
+import {
+  ILLMService,
+  LLMRequest,
+  LLMResponse,
+  MultimodalLLMRequest,
+} from "./ILLMService";
 
 /**
  * Service for interacting with local LLM using Ollama
  */
-export class LocalLLMService {
+export class LocalLLMService implements ILLMService {
   private baseUrl: string;
   private defaultModel: string;
 

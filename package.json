@@ -53,6 +53,8 @@
     "yaml": "^2.4.2"
   },
   "dependencies": {
+    "@google-ai/generativelanguage": "^3.1.0",
+    "@google/generative-ai": "^0.24.0",
     "child_process": "^1.0.2",
     "util": "^0.12.5"
   }

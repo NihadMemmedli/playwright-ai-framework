@@ -1,9 +1,15 @@
 import { exec } from "child_process";
 import { promisify } from "util";
 import { LocalLLMService } from "./LocalLLMService";
+import { GoogleLLMService } from "./GoogleLLMService"; // Import the new service
+import { ILLMService } from "./ILLMService"; // Import the interface
+import { Config } from "../config/config"; // Import Config
 import { Logger } from "../utils/Logger";
 
 const execPromise = promisify(exec);
+
+// Optional: Singleton pattern to avoid re-creating service instances
+let llmServiceInstance: ILLMService | null = null;
 
 /**
  * Utility functions for working with Ollama LLMs
@@ -128,5 +134,43 @@ export class LLMUtils {
   static getRecommendedModel(): string {
     // We have llama3:latest and mistral:latest available
     return "llama3:latest";
+  }
+
+  /**
+   * Factory function to get the configured LLM service instance.
+   * Implements a simple singleton pattern.
+   */
+  static getLLMService(): ILLMService {
+    if (llmServiceInstance) {
+      return llmServiceInstance;
+    }
+
+    Logger.info(`Configuring LLM service based on AI_SERVICE_MODE: ${Config.aiServiceMode}`);
+
+    switch (Config.aiServiceMode) {
+      case "google":
+        try {
+          llmServiceInstance = new GoogleLLMService();
+          Logger.info("Using GoogleLLMService.");
+        } catch (error) {
+           Logger.error("Failed to initialize GoogleLLMService, falling back to LocalLLMService.", error instanceof Error ? error : new Error(String(error)));
+           llmServiceInstance = new LocalLLMService(Config.ollamaBaseUrl, Config.ollamaDefaultModel);
+           Logger.warn("Falling back to LocalLLMService due to Google service initialization error.");
+        }
+        break;
+      case "local":
+      default:
+        llmServiceInstance = new LocalLLMService(Config.ollamaBaseUrl, Config.ollamaDefaultModel);
+        Logger.info("Using LocalLLMService.");
+        break;
+    }
+
+    if (!llmServiceInstance) {
+       // This case should theoretically not be reached due to the default case, but added for safety.
+       Logger.error("Could not instantiate any LLM service. Defaulting to LocalLLMService.");
+       llmServiceInstance = new LocalLLMService(Config.ollamaBaseUrl, Config.ollamaDefaultModel);
+    }
+
+    return llmServiceInstance;
   }
 }

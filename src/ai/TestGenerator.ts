@@ -1,4 +1,9 @@
-import { LocalLLMService, LLMRequest } from "./LocalLLMService";
+import { ILLMService, LLMRequest } from "./ILLMService"; // Import interface and shared types
+import { Logger } from "../utils/Logger";
+import { LLMUtils } from "./LLMUtils";
+
+/**
+import { ILLMService, LLMRequest } from "./ILLMService"; // Import interface and shared types
 import { Logger } from "../utils/Logger";
 import { LLMUtils } from "./LLMUtils";
 
@@ -6,18 +11,19 @@ import { LLMUtils } from "./LLMUtils";
  * Service for generating test cases using LLM
  */
 export class TestGenerator {
-  private llmService: LocalLLMService;
-  private readonly defaultModel: string;
+  private llmService: ILLMService; // Use the interface type
+  private readonly defaultModel: string; // Keep this if needed for specific requests, or remove if model comes from config
 
   /**
    * Create a new TestGenerator
-   * @param llmService - Optional LLM service instance
+   * Uses the factory function to get the configured LLM service.
    */
-  constructor(llmService?: LocalLLMService) {
-    this.defaultModel = LLMUtils.getRecommendedModel();
-    this.llmService =
-      llmService ||
-      new LocalLLMService("http://localhost:11434/api", this.defaultModel);
+  constructor() {
+    // Get the configured service instance via the factory
+    this.llmService = LLMUtils.getLLMService();
+    // Note: defaultModel might need adjustment depending on the service used.
+    // Consider getting the appropriate default model from Config based on aiServiceMode.
+    this.defaultModel = LLMUtils.getRecommendedModel(); // Keeping this for now, might need refinement
   }
 
   /**

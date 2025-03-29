@@ -92,6 +92,15 @@ export class Config {
   static readonly ollamaVisualModel: string =
     process.env.OLLAMA_VISUAL_MODEL || "llava:latest"; // Default model for visual tasks
 
+  // AI Service Selection
+  static readonly aiServiceMode: "local" | "google" =
+    (process.env.AI_SERVICE_MODE?.toLowerCase() as "local" | "google") || "local";
+
+  // Google AI Configuration (if AI_SERVICE_MODE=google)
+  static readonly googleApiKey: string = process.env.GOOGLE_API_KEY || "";
+  static readonly googleGeminiModel: string =
+    process.env.GOOGLE_GEMINI_MODEL || "gemini-pro";
+
   // Reporting
   static readonly ALLURE_RESULTS_DIR: string =
     process.env.ALLURE_RESULTS_DIR || "allure-results";

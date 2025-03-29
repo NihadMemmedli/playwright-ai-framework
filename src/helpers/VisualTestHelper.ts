@@ -2,7 +2,8 @@ import { Page, expect } from "@playwright/test";
 import * as fs from "fs/promises";
 import * as path from "path";
 // PNG, pixelmatch, and allure removed
-import { LocalLLMService, MultimodalLLMRequest } from "../ai/LocalLLMService";
+import { LocalLLMService } from "../ai/LocalLLMService";
+import { MultimodalLLMRequest } from "../ai/ILLMService"; // Import type from the interface file
 import { Logger } from "../utils/Logger";
 import { Config } from "../config/config"; // Use Config class import
 
@@ -24,12 +25,22 @@ async function ensureDir(dirPath: string) {
   }
 }
 
-// Instantiate the LLM Service
-const llmService = new LocalLLMService(
-  Config.ollamaBaseUrl,
-  Config.ollamaDefaultModel,
-);
-const visualModel = Config.ollamaVisualModel || "llava:latest";
+// Get the configured LLM Service instance using the factory
+import { LLMUtils } from "../ai/LLMUtils"; // Ensure LLMUtils is imported
+const llmService = LLMUtils.getLLMService();
+
+// Determine the model to use for visual tasks based on the configured service
+let visualModel: string;
+if (Config.aiServiceMode === "google") {
+  // Use a known vision-capable Gemini model for Google service
+  // Using gemini-1.5-flash as it's generally available and good for multimodal
+  visualModel = "gemini-1.5-flash";
+  Logger.info(`Using Google vision model: ${visualModel}`);
+} else {
+  // Use the configured Ollama visual model for local service
+  visualModel = Config.ollamaVisualModel || "llava:latest";
+  Logger.info(`Using Local Ollama vision model: ${visualModel}`);
+}
 
 // --- Interface for the return value ---
 export interface VisualAIResult {
@@ -135,6 +146,9 @@ export async function expectPageToMatchVisuallyAI(
     // Consider adding format: "json" if Ollama API supports it for the model
     // systemPrompt: "You are an expert visual QA analyst. Respond only in the requested JSON format." // Optional system prompt
   };
+
+  // Ensure the request uses the dynamically determined visualModel
+  request.model = visualModel;
 
   // Call the LLM
   const response = await llmService.generateMultimodalResponse(request);

@@ -77,6 +77,25 @@ RETRY_COUNT=2
 
 # Reporting
 ALLURE_RESULTS_DIR=allure-results
+
+### AI Service Configuration
+
+This framework supports using either a local LLM (via Ollama) or a cloud-based LLM (currently Google Gemini via AI Studio) for AI-assisted features like test generation, enhancement, and visual analysis.
+
+-   **`AI_SERVICE_MODE`**: Determines which service to use.
+    -   `local` (Default): Uses the locally running Ollama service. Requires Ollama setup (see below).
+    -   `google`: Uses the Google Gemini API via Google AI Studio. Requires a `GOOGLE_API_KEY`.
+-   **`GOOGLE_API_KEY`**: Your API key from Google AI Studio (required if `AI_SERVICE_MODE=google`). Get one [here](https://aistudio.google.com/app/apikey).
+-   **`GOOGLE_GEMINI_MODEL`**: The specific Gemini model to use (e.g., `gemini-pro`, `gemini-1.5-flash`). Defaults to `gemini-pro`. Ensure the chosen model supports the required capabilities (e.g., vision for multimodal tasks).
+
+### Local LLM (Ollama) Configuration
+
+These settings are used only if `AI_SERVICE_MODE=local`.
+
+-   **`OLLAMA_BASE_URL`**: The base URL for your running Ollama API endpoint (defaults to `http://localhost:11434/api`).
+-   **`OLLAMA_DEFAULT_MODEL`**: The default Ollama model for general text generation tasks (e.g., `llama3:latest`).
+-   **`OLLAMA_VISUAL_MODEL`**: The Ollama model used specifically for visual analysis tasks (e.g., `llava:latest`). Ensure this model is pulled and available in Ollama.
+
 ```
 
 ## Hardware Requirements (for Local AI Features)
