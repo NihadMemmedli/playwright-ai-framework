@@ -1,0 +1,16 @@
+# Ignore artifacts:
+node_modules
+package-lock.json
+playwright-report/
+allure-report/
+allure-results/
+test-results/
+test-data/
+dist/
+build/
+
+# Ignore configuration files if needed (optional)
+# .env
+
+# Ignore specific files if needed (optional)
+# src/some-generated-file.ts

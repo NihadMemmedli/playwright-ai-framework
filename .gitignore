@@ -1,0 +1,75 @@
+# Dependencies
+/node_modules
+
+# Testing
+/test-results/
+/playwright-report/
+
+# Reports
+/src/reports/allure-results/
+/src/reports/html-report/
+/src/reports/dashboard-data/*.json
+!/src/reports/dashboard-data/history-template.json
+!/src/reports/dashboard/css/
+!/src/reports/dashboard/js/
+!/src/reports/dashboard/index.html
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build
+/dist
+/build
+*.tsbuildinfo
+*.js.map
+
+# IDE/OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Node.js dependencies
+node_modules/
+
+# TypeScript build output
+dist/
+build/
+
+# Test results and reports
+allure-results/
+allure-report/
+playwright-report/
+test-results/
+screenshots/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage reports
+coverage/
+.nyc_output
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# OS-specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini 
