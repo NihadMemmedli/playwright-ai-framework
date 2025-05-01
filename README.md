@@ -30,7 +30,7 @@ Follow these steps to set up the project locally:
     # Replace <repository-url> with the actual GitHub repository URL once available
     git clone https://github.com/NihadMemmedli/playwright-ai-framework.git
     # Navigate into the project directory
-    cd project1
+    cd playwright-ai-framework
     ```
 
 2.  **Install Dependencies:**
